@@ -1,15 +1,20 @@
 package com.api.probarber.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_APPOINTMENT")
-public class AppointmentModel {
+public class AppointmentModel implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id;
 
     @ManyToOne
@@ -21,17 +26,47 @@ public class AppointmentModel {
     private BarberModel barber;
 
     @ManyToMany
-    @JoinColumn(name = "service_id")
-    private List<ServiceModel> service;
+    @JoinTable(name = "appointment_service",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private List<ServiceModel> services;
 
-    @Temporal(TemporalType.DATE)
-    private Calendar appoitmentDate;
 
-    @Temporal(TemporalType.TIME)
-    private
+    @Column(nullable = false)
+    private LocalDateTime appoitmentDate;
 
+    public LocalDateTime getAppoitmentDate() {
+        return appoitmentDate;
+    }
+
+    public void setAppoitmentDate(LocalDateTime appoitmentDate) {
+        this.appoitmentDate = appoitmentDate;
+    }
+
+    //    @Temporal(TemporalType.TIME)
+//    private
+    @Column(nullable = false)
+    private Boolean isDelete;
+    @Column(nullable = false)
+    private LocalDateTime registrationDate;
     @Column(name = "total")
     private Double total;
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
+    }
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public Double getTotal() {
         return total;
@@ -65,11 +100,11 @@ public class AppointmentModel {
         this.barber = barber;
     }
 
-    public List<ServiceModel> getService() {
-        return service;
+    public List<ServiceModel> getServices() {
+        return services;
     }
 
-    public void setService(List<ServiceModel> service) {
-        this.service = service;
+    public void setServices(List<ServiceModel> service) {
+        this.services = services;
     }
 }

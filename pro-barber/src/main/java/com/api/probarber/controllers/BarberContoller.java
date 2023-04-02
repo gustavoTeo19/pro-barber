@@ -45,7 +45,7 @@ public class BarberContoller {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> getBarner(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getBarber(@PathVariable(value = "id") UUID id){
         Optional<BarberModel> barberModelOptional = barberService.findById(id);
         if(!barberModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Conflict: Barber not found!");

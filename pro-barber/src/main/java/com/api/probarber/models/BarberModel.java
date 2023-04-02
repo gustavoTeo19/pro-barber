@@ -1,13 +1,14 @@
 package com.api.probarber.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_BARBER")
-public class BarberModel {
+public class BarberModel implements Serializable {
     private static final long serialVersionUID  = 1L;
 
     @Id

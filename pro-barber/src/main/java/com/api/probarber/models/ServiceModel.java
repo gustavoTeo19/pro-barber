@@ -1,20 +1,23 @@
 package com.api.probarber.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_SERVICE")
-public class ServiceModel {
-    private static final long serialVersionUID  = 1L;
+public class ServiceModel{
+//    private static final long serialVersionUID  = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToMany(mappedBy = "service")
+    @ManyToMany(mappedBy = "services")
     private List<AppointmentModel> appointments;
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package com.api.probarber.services;
 
 import com.api.probarber.models.ClientModel;
 import com.api.probarber.repositories.ClientRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class ClientService {
         return clientRepository.save(clientModel);
     }
 
-    public List<ClientModel> findAll() {
-        return clientRepository.findAllByDelete();
+    public List<ClientModel> findAllByDelete(Pageable pageable) {
+        return clientRepository.findAllByDelete(pageable);
     }
 
     public Optional<ClientModel> findByid(UUID id) {

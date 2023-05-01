@@ -1,5 +1,7 @@
 package com.api.probarber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ public class ClientModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<AppointmentModel> appointments;
 

@@ -6,6 +6,9 @@ import com.api.probarber.models.BarberModel;
 import com.api.probarber.models.ServiceModel;
 import com.api.probarber.services.BarberService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +43,9 @@ public class BarberContoller {
     }
 
     @GetMapping
-    public ResponseEntity<List<BarberModel>> getAllBarbers(){
-        return ResponseEntity.status(HttpStatus.OK).body(barberService.findAll());
+    public ResponseEntity<Object> getAllBarbers(@PageableDefault(page = 0, size = 10, sort = "id",
+            direction = Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(barberService.findAllByDelete(pageable));
     }
 
     @GetMapping("{id}")

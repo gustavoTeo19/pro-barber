@@ -1,5 +1,7 @@
 package com.api.probarber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +20,7 @@ public class BarberModel implements Serializable {
     @Column(nullable = false)
     private LocalDateTime registrationDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "barber")
     private List<AppointmentModel> appointments;
 

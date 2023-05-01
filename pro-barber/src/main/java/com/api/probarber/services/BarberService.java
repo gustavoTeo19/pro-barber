@@ -2,6 +2,8 @@ package com.api.probarber.services;
 
 import com.api.probarber.models.BarberModel;
 import com.api.probarber.repositories.BarberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,11 @@ public class BarberService {
     }
 
     public List<BarberModel> findAll() {
-        return barberRepository.findAllByDelete();
+        return barberRepository.findAll();
+    }
+
+    public Page<BarberModel> findAllByDelete(Pageable pageable) {
+        return barberRepository.findAllByDelete(pageable);
     }
 
     public Optional<BarberModel> findById(UUID id) {

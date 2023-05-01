@@ -4,10 +4,11 @@ import com.api.probarber.dtos.AppointmentDto;
 import com.api.probarber.models.AppointmentModel;
 import com.api.probarber.models.BarberModel;
 import com.api.probarber.models.ClientModel;
+import com.api.probarber.models.ServiceModel;
 import com.api.probarber.services.AppointmentService;
 import com.api.probarber.services.BarberService;
 import com.api.probarber.services.ClientService;
-import org.springframework.beans.BeanUtils;
+import com.api.probarber.services.ServiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,12 +30,14 @@ public class AppointmentController {
     final BarberService barberService;
 
     final ClientService clientService;
+    final ServiceService serviceService;
 
     public AppointmentController(AppointmentService appointmentService, BarberService barberService,
-                                 ClientService clientService) {
+                                 ClientService clientService, ServiceService serviceService) {
         this.appointmentService = appointmentService;
         this.barberService = barberService;
         this.clientService = clientService;
+        this.serviceService = serviceService;
     }
 
     @PostMapping
@@ -46,13 +51,34 @@ public class AppointmentController {
         Optional<BarberModel> barberModel = barberService.findById(barberId);
         Optional<ClientModel> clientModel = clientService.findByid(clientId);
 
+        List<ServiceModel> services = new ArrayList<>();
+        for(UUID ids: appointmentDto.getServices()){
+            Optional<ServiceModel> serviceOpt = serviceService.findById(ids);
+            serviceOpt.ifPresent(services::add);
+        }
+
         System.out.println(clientModel);
         System.out.println(barberModel);
+        BarberModel barberModel1 = new BarberModel();
+        barberModel1.setName(barberModel.get().getName());
+        barberModel1.setId(barberModel.get().getId());
+        barberModel1.setDelete(barberModel.get().getDelete());
+        barberModel1.setCpf(barberModel.get().getCpf());
+        barberModel1.setRegistrationDate(barberModel.get().getRegistrationDate());
+
+        ClientModel clientModel1 = new ClientModel();
+        clientModel1.setCpf(clientModel.get().getCpf());
+        clientModel1.setDelete(clientModel.get().getDelete());
+        clientModel1.setName(clientModel.get().getName());
+        clientModel1.setId(clientModel.get().getId());
+        clientModel1.setAddress(clientModel.get().getAddress());
+        clientModel1.setCellPhone(clientModel.get().getCellPhone());
+        clientModel1.setRegistrationDate(clientModel.get().getRegistrationDate());
 
         appointmentModel.setAppoitmentDate(appointmentDto.getAppoitmentDate());
-        appointmentModel.setServices(appointmentDto.getServices());
-        appointmentModel.setCliente(clientModel.get());
-        appointmentModel.setBarber(barberModel.get());
+        appointmentModel.setServices(services);
+        appointmentModel.setCliente(clientModel1);
+        appointmentModel.setBarber(barberModel1);
         appointmentModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         appointmentModel.setDelete(false);
         return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.save(appointmentModel));

@@ -3,6 +3,8 @@ package com.api.probarber.services;
 import com.api.probarber.models.ClientModel;
 import com.api.probarber.models.ServiceModel;
 import com.api.probarber.repositories.ServiceRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class ServiceService {
         return serviceRepository.save(serviceModel);
     }
 
-    public List<ServiceModel> findAll() {
-        return serviceRepository.findAllByDelete();
+    public Page<ServiceModel> findAllByDelete(Pageable pageable) {
+        return serviceRepository.findAllByDelete(pageable);
     }
 
     public Optional<ServiceModel> findById(UUID id) {

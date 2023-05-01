@@ -22,6 +22,10 @@ public class ClientModel implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<AppointmentModel> appointments;
 
+    @ManyToOne
+    @JoinColumn(name = "loyalty_plan_id")
+    private LoyaltyPlanModel loyaltyPlan;
+
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 

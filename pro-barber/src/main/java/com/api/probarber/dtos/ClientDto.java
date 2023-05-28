@@ -1,8 +1,10 @@
 package com.api.probarber.dtos;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+@Data
 public class ClientDto {
 
     @NotBlank
@@ -18,35 +20,11 @@ public class ClientDto {
     @NotBlank
     private String address;
 
-    public String getCpf() {
-        return cpf;
-    }
+    @NotBlank
+    private String password;
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+    @NotBlank
+    private String email;
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCellPhone() {
-        return cellPhone;
-    }
-
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

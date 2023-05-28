@@ -1,6 +1,7 @@
 package com.api.probarber.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,13 +16,24 @@ public class LoyaltyPlanModel {
     private List<ClientModel> clients;
 
     @Column(nullable = false)
-    private int necessary_amount;
+    private int necessaryAmount;
 
     @Column(nullable = false)
     private Double discount;
 
     @Column(nullable = false)
     private Boolean isDelete;
+
+    @Column(nullable = false)
+    private LocalDateTime registrationDate;
+
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public UUID getId() {
         return id;
@@ -39,12 +51,12 @@ public class LoyaltyPlanModel {
         this.clients = clients;
     }
 
-    public int getNecessary_amount() {
-        return necessary_amount;
+    public int getNecessaryAmount() {
+        return necessaryAmount;
     }
 
-    public void setNecessary_amount(int necessary_amount) {
-        this.necessary_amount = necessary_amount;
+    public void setNecessaryAmount(int necessaryAmount) {
+        this.necessaryAmount = necessaryAmount;
     }
 
     public Double getDiscount() {

@@ -2,6 +2,7 @@ package com.api.probarber.services;
 
 import com.api.probarber.models.ClientModel;
 import com.api.probarber.repositories.ClientRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class ClientService {
         return clientRepository.save(clientModel);
     }
 
-    public List<ClientModel> findAllByDelete(Pageable pageable) {
+    public Page<ClientModel> findAllByDelete(Pageable pageable) {
         return clientRepository.findAllByDelete(pageable);
     }
 
@@ -32,5 +33,9 @@ public class ClientService {
 
     public boolean existByCpf(String cpf) {
         return clientRepository.existsByCpf(cpf);
+    }
+
+    public boolean existByEmail(String email) {
+        return clientRepository.existsByEmail(email);
     }
 }

@@ -2,6 +2,7 @@ package com.api.probarber.repositories;
 
 import com.api.probarber.models.ClientModel;
 import com.api.probarber.models.ServiceModel;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +14,7 @@ import java.util.UUID;
 public interface ClientRepository extends JpaRepository<ClientModel, UUID> {
     boolean existsByCpf(String cpf);
     @Query("select e from #{#entityName} e where e.isDelete = false")
-    List<ClientModel> findAllByDelete(Pageable pageable);
+    Page<ClientModel> findAllByDelete(Pageable pageable);
+
+    boolean existsByEmail(String email);
 }

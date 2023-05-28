@@ -20,6 +20,9 @@ public class UserModel implements UserDetails, Serializable {
 
     @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false, unique = true)
+    private String cpf;
     @Column(nullable = false)
     private String password;
     @ManyToMany
@@ -33,6 +36,23 @@ public class UserModel implements UserDetails, Serializable {
         //retorna a coleção de regras do usuário
         return this.roles;
     }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public List<RoleModel> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleModel> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String getPassword() {
         // TODO Auto-generated method stub

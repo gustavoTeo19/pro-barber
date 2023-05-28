@@ -3,6 +3,7 @@ package com.api.probarber.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,11 @@ public class BarberModel implements Serializable {
     @OneToMany(mappedBy = "barber")
     private List<AppointmentModel> appointments;
 
+    @Column
+    private String email;
+
+    @Column
+    private String cellPhone;
     @Column(nullable = false)
     private String name;
 
@@ -32,6 +38,22 @@ public class BarberModel implements Serializable {
 
     @Column(nullable = false)
     private Boolean isDelete;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
 
     public LocalDateTime getRegistrationDate() {
         return registrationDate;

@@ -22,9 +22,13 @@ public class ClientModel implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<AppointmentModel> appointments;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "loyalty_plan_id")
     private LoyaltyPlanModel loyaltyPlan;
+
+    @Column(nullable = false)
+    private int loyaltyAmount;
 
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
@@ -34,6 +38,9 @@ public class ClientModel implements Serializable {
 
     @Column(nullable = false)
     private String cellPhone;
+
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private LocalDateTime registrationDate;
@@ -54,6 +61,30 @@ public class ClientModel implements Serializable {
 
     public UUID getId() {
         return id;
+    }
+
+    public int getLoyaltyAmount() {
+        return loyaltyAmount;
+    }
+
+    public void setLoyaltyAmount(int loyaltyAmount) {
+        this.loyaltyAmount = loyaltyAmount;
+    }
+
+    public LoyaltyPlanModel getLoyaltyPlan() {
+        return loyaltyPlan;
+    }
+
+    public void setLoyaltyPlan(LoyaltyPlanModel loyaltyPlan) {
+        this.loyaltyPlan = loyaltyPlan;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setId(UUID id) {

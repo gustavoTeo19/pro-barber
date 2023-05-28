@@ -14,14 +14,15 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    UserRepository userRepository;
+        @Autowired
+        UserRepository userRepository;
 
-    @Override
+        @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // TODO Auto-generated method stub
         UserModel userModel = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username " + username));
+        System.out.println(userModel);
         return new User(userModel.getUsername(), userModel.getPassword(), true, true,
                 true,true, userModel.getAuthorities());
     }

@@ -9,6 +9,11 @@ public class BarberDto {
     private String cpf;
 
     @NotBlank
+    private String cellPhone;
+
+    @NotBlank
+    private String email;
+    @NotBlank
     private String name;
 
     public String getCpf() {
@@ -25,5 +30,21 @@ public class BarberDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

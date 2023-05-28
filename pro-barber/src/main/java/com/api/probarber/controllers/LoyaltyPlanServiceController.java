@@ -1,7 +1,9 @@
 package com.api.probarber.controllers;
 
-import com.api.probarber.dtos.ClientDto;
+import com.api.probarber.dtos.LoyaltyPlanDto;
 import com.api.probarber.models.ClientModel;
+import com.api.probarber.models.LoyaltyPlanModel;
+import com.api.probarber.services.ClientService;
 import com.api.probarber.services.LoyaltyPlanService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -21,9 +25,11 @@ import java.time.ZoneId;
 public class LoyaltyPlanServiceController {
 
     final LoyaltyPlanService loyaltyPlanService;
+    final ClientService clientService;
 
-    public LoyaltyPlanServiceController(LoyaltyPlanService loyaltyPlanService) {
+    public LoyaltyPlanServiceController(LoyaltyPlanService loyaltyPlanService, ClientService clientService) {
         this.loyaltyPlanService = loyaltyPlanService;
+        this.clientService = clientService;
     }
 
     @GetMapping
@@ -32,15 +38,58 @@ public class LoyaltyPlanServiceController {
         return ResponseEntity.status(HttpStatus.OK).body(loyaltyPlanService.findAllByDelete(pageable));
     }
 
-//    @PostMapping
-//    public ResponseEntity<Object> savePlan(@RequestBody @Valid ClientDto clientDto){
-//        if(clientService.existByCpf(clientDto.getCpf())){
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: CPF is already in use!");
-//        }
-//        var clientModel = new ClientModel();
-//        BeanUtils.copyProperties(clientDto, clientModel);
-//        clientModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-//        clientModel.setDelete(false);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.save(clientModel));
-//    }
+    @PostMapping("/link/{userId}/{planId}")
+    public ResponseEntity<Object> linkUserToPlan(@PathVariable(value = "userId") UUID userId,
+                                                 @PathVariable(value = "planId") UUID planId) {
+        Optional<ClientModel> clientModelOptional = clientService.findByid(userId);
+        if(!clientModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+        }
+
+        Optional<LoyaltyPlanModel> loyaltyPlanModelOptional = loyaltyPlanService.findByid(planId);
+        if(!loyaltyPlanModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");
+        }
+
+        clientModelOptional.get().setLoyaltyPlan(loyaltyPlanModelOptional.get());
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.save(clientModelOptional.get()));
+    }
+
+    @PostMapping("/point/{userId}")
+    public ResponseEntity<Object> addOnePoint(@PathVariable(value = "userId") UUID userId){
+        Optional<ClientModel> clientModelOptional = clientService.findByid(userId);
+        if(!clientModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+        }
+        Optional<LoyaltyPlanModel> loyaltyPlanModelOptional = loyaltyPlanService.findByid(clientModelOptional.get().getLoyaltyPlan().getId());
+        if(!loyaltyPlanModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");
+        }
+
+        ClientModel clientModel = clientModelOptional.get();
+        LoyaltyPlanModel loyaltyPlanModel = loyaltyPlanModelOptional.get();
+        String rsp = "";
+
+        if(clientModel.getLoyaltyAmount() < loyaltyPlanModel.getNecessaryAmount()){
+            clientModel.setLoyaltyAmount(clientModel.getLoyaltyAmount() + 1);
+            clientService.save(clientModel);
+            rsp = "Ponto adicionado com sucesso!";
+        } else if (clientModel.getLoyaltyAmount() == loyaltyPlanModel.getNecessaryAmount()) {
+            clientModel.setLoyaltyAmount(0);
+            clientService.save(clientModel);
+            rsp = "promocção concluída";
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(rsp);
+
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> savePlan(@RequestBody @Valid LoyaltyPlanDto loyaltyPlanDto){
+
+        var loyaltyPlanModel = new LoyaltyPlanModel();
+        BeanUtils.copyProperties(loyaltyPlanDto, loyaltyPlanModel);
+        loyaltyPlanModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        loyaltyPlanModel.setDelete(false);
+        return ResponseEntity.status(HttpStatus.CREATED).body(loyaltyPlanService.save(loyaltyPlanModel));
+    }
 }

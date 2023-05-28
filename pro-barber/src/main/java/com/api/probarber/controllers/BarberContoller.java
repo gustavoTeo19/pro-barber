@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin("http://localhost:3000/")
 @RequestMapping("/barber")
 public class BarberContoller {
     final BarberService barberService;

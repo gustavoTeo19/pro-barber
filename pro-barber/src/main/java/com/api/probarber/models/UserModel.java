@@ -37,6 +37,17 @@ public class UserModel implements UserDetails, Serializable {
         return this.roles;
     }
 
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
+
     public String getCpf() {
         return cpf;
     }

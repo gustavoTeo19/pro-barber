@@ -1,6 +1,7 @@
 package com.api.probarber.models;
 
 import com.api.probarber.enums.RoleName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -12,10 +13,11 @@ import java.util.UUID;
 public class RoleModel implements GrantedAuthority, Serializable {
 
     private static final long serialVersionUID = 1L;
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID roleId;
-
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private RoleName roleName;

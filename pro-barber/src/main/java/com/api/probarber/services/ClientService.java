@@ -31,6 +31,10 @@ public class ClientService {
         return clientRepository.findById(id);
     }
 
+    public Optional<ClientModel> findByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
     public boolean existByCpf(String cpf) {
         return clientRepository.existsByCpf(cpf);
     }

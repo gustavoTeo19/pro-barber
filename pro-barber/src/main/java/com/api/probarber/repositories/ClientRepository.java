@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface ClientRepository extends JpaRepository<ClientModel, UUID> {
@@ -16,5 +17,6 @@ public interface ClientRepository extends JpaRepository<ClientModel, UUID> {
     @Query("select e from #{#entityName} e where e.isDelete = false")
     Page<ClientModel> findAllByDelete(Pageable pageable);
 
+    Optional<ClientModel> findByEmail(String email);
     boolean existsByEmail(String email);
 }

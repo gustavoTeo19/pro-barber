@@ -46,10 +46,10 @@ public class AppointmentController {
 
         System.out.println(appointmentDto);
         UUID barberId = appointmentDto.getBarberId();
-        UUID clientId = appointmentDto.getClienteId();
+        String clientEmail = appointmentDto.getClientEmail();
 
         Optional<BarberModel> barberModel = barberService.findById(barberId);
-        Optional<ClientModel> clientModel = clientService.findByid(clientId);
+        Optional<ClientModel> clientModel = clientService.findByEmail(clientEmail);
 
         List<ServiceModel> services = new ArrayList<>();
         for(UUID ids: appointmentDto.getServices()){

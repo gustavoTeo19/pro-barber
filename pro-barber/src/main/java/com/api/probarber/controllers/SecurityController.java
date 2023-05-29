@@ -1,32 +1,34 @@
 package com.api.probarber.controllers;
 
-import com.api.probarber.dtos.ClientDto;
-import com.api.probarber.dtos.LoginDto;
-import com.api.probarber.models.ClientModel;
-import org.springframework.beans.BeanUtils;
+import com.api.probarber.dtos.BarberDto;
+import com.api.probarber.dtos.RolesResponseDto;
+import com.api.probarber.dtos.UserValidateDto;
+import com.api.probarber.models.UserModel;
+import com.api.probarber.repositories.UserRepository;
+import com.api.probarber.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.*;
 
-//@CrossOrigin()
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/security")
 public class SecurityController {
-    @PostMapping
-    public ResponseEntity<Object> validate(){
-//        if(clientService.existByCpf(clientDto.getCpf())){
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: CPF is already in use!");
-//        }
-//        var clientModel = new ClientModel();
-//        BeanUtils.copyProperties(clientDto, clientModel);
-//        clientModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-//        clientModel.setDelete(false);
+    final UserRepository userRepository;
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Login bem sucedido");
+    public SecurityController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @PostMapping()
+    public ResponseEntity<Object> validate(@RequestBody @Valid UserValidateDto userValidateDto){
+
+        byte[] decodedBytes = Base64.getDecoder().decode(userValidateDto.getUser());
+        String dadoDecodificado = new String(decodedBytes);
+        Optional<UserModel> userModal = userRepository.findByUsername(dadoDecodificado);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userModal.get().getRoles());
     }
 }

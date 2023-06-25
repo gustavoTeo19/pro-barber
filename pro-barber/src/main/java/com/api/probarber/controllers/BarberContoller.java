@@ -48,6 +48,12 @@ public class BarberContoller {
         return ResponseEntity.status(HttpStatus.OK).body(barberService.findAllByDelete(pageable));
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<Object> getAllBarbersByName(@PageableDefault(page = 0, size = 10, sort = "id",
+            direction = Sort.Direction.ASC) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(barberService.findAllByDeleteOnlyName());
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Object> getBarber(@PathVariable(value = "id") UUID id){
         Optional<BarberModel> barberModelOptional = barberService.findById(id);

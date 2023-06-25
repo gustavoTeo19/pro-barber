@@ -1,5 +1,6 @@
 package com.api.probarber.repositories;
 
+import com.api.probarber.dtos.BarberResponseDto;
 import com.api.probarber.models.BarberModel;
 import com.api.probarber.models.ClientModel;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,10 @@ public interface BarberRepository extends JpaRepository<BarberModel, UUID> {
 
     @Query("select e from #{#entityName} e where e.isDelete = false")
     Page<BarberModel> findAllByDelete(Pageable pageable);
+
+    @Query("select e from #{#entityName} e where e.isDelete = false")
+    List<BarberModel> findAllByDeleteOnlyName();
+
+
+
 }

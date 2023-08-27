@@ -83,6 +83,30 @@ public class LoyaltyPlanServiceController {
 
     }
 
+    @PostMapping("/point/beta/{userId}")
+    public ResponseEntity<Object> addOnePointBeta(@PathVariable(value = "userId") UUID userId){
+        Optional<ClientModel> clientModelOptional = clientService.findByid(userId);
+        if(!clientModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+        }
+
+        ClientModel clientModel = clientModelOptional.get();
+        String rsp = "";
+
+        if(clientModel.getLoyaltyAmount() < 10){
+            clientModel.setLoyaltyAmount(clientModel.getLoyaltyAmount() + 1);
+            clientService.save(clientModel);
+            rsp = "Ponto adicionado com sucesso!";
+        } else if (clientModel.getLoyaltyAmount() == 10) {
+            clientModel.setLoyaltyAmount(0);
+            clientService.save(clientModel);
+            rsp = "promoção concluída";
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(rsp);
+
+    }
+
+
     @PostMapping
     public ResponseEntity<Object> savePlan(@RequestBody @Valid LoyaltyPlanDto loyaltyPlanDto){
 

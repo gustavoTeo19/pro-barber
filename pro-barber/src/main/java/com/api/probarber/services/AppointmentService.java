@@ -3,6 +3,8 @@ package com.api.probarber.services;
 import com.api.probarber.models.AppointmentModel;
 import com.api.probarber.models.BarberModel;
 import com.api.probarber.repositories.AppointmentRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,6 +30,10 @@ public class AppointmentService {
     @Transactional
     public void delete(AppointmentModel appointmentModel){
         appointmentRepository.delete(appointmentModel);
+    }
+
+    public Page<AppointmentModel> findAllByDelete(Pageable pageable) {
+        return appointmentRepository.findAllByDelete(pageable);
     }
 
 }

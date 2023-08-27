@@ -38,6 +38,7 @@ public class WebSecurityConfigV2 {
                 .antMatchers(HttpMethod.POST, "/security").hasAnyRole("USER", "ADMIN")
 //                .antMatchers(HttpMethod.POST, "/security").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/loyalty-plan").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/loyalty-plan/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/barber").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/barber/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/barber").hasRole("ADMIN")
@@ -62,6 +63,7 @@ public class WebSecurityConfigV2 {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:3000", "http://127.0.0.1:3000"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(Arrays.asList("POST","GET"));
         configuration.setAllowCredentials(true);
 //        configuration.setAllowedHeaders(List.of("Authorization"));

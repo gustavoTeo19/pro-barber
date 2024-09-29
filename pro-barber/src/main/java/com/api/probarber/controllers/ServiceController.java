@@ -1,8 +1,8 @@
 package com.api.probarber.controllers;
 
 import com.api.probarber.dtos.ServiceDto;
-import com.api.probarber.models.ClientModel;
 import com.api.probarber.models.ServiceModel;
+import com.api.probarber.services.ImageUploadService;
 import com.api.probarber.services.ServiceService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +11,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,9 +24,11 @@ import java.util.UUID;
 @RequestMapping("/services")
 public class ServiceController {
     final ServiceService serviceService;
+    final ImageUploadService imageUploadService;
 
-    public ServiceController(ServiceService serviceService) {
+    public ServiceController(ServiceService serviceService, ImageUploadService imageUploadService) {
         this.serviceService = serviceService;
+        this.imageUploadService = imageUploadService;
     }
 
     @PostMapping
@@ -78,6 +80,15 @@ public class ServiceController {
         serviceModel.setRegistrationDate(serviceModelOptional.get().getRegistrationDate());
         serviceModel.setDelete(true);
         return ResponseEntity.status(HttpStatus.OK).body(serviceService.save(serviceModel));
+
+    }
+
+    @PostMapping("/up")
+    public ResponseEntity<Object> upImage(@RequestPart("image") MultipartFile image){
+
+
+        String imgU = imageUploadService.uploadImg(image);
+        return ResponseEntity.status(HttpStatus.OK).body(imgU);
 
     }
 }
